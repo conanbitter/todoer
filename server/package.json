@@ -19,5 +19,12 @@
     "url": "https://github.com/conanbitter/todoer/issues"
   },
   "homepage": "https://github.com/conanbitter/todoer#readme",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-async-handler": "^1.2.0"
+  }
 }

@@ -2,6 +2,7 @@
     "name": "todoer-server",
     "version": "0.0.1",
     "description": "Server for Todoer",
+    "type": "module",
     "main": "built/server.js",
     "scripts": {
         "build": "tsc",

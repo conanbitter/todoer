@@ -7,7 +7,9 @@
     "scripts": {
         "build": "tsc",
         "start": "node .",
-        "watch": "start \"TypeScript\" tsc -w & start \"Server\" nodemon . -w built",
+        "watch:ts": "tsc -w",
+        "watch:server": "nodemon . -w built",
+        "watch": "start /MIN \"TypeScript\" tsc -w & start /MIN \"Server\" nodemon . -w built",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

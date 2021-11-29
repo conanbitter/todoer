@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from 'express'
-import asyncHandler from 'express-async-handler';
+import { asyncHandler } from './common.js';
 const app: Application = express();
 const port = 8080;
 

@@ -1,1 +1,1 @@
-[{"kind":1,"language":"markdown","value":"# Test calls for server","outputs":[]},{"kind":2,"language":"rest-book","value":"GET http://localhost:8080","outputs":[]},{"kind":2,"language":"rest-book","value":"GET http://localhost:8080/test","outputs":[]}]
+[{"kind":1,"language":"markdown","value":"# Test calls for server","outputs":[]},{"kind":2,"language":"rest-book","value":"GET http://localhost:8080","outputs":[]},{"kind":2,"language":"rest-book","value":"GET http://localhost:8080/task/list","outputs":[]}]

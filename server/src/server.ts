@@ -1,6 +1,8 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import asyncHandler from 'express-async-handler';
 import { LoginData } from './common.js';
+import * as task from './models/task.js';
+
 const app: Application = express();
 const port = 8080;
 
@@ -35,6 +37,11 @@ app.get('/', (req: Request, res: Response): void => {
 });
 
 app.use(needLogin);
+
+app.get('/task/list', task.list);
+app.get('/task/new', task.create);
+app.get('/task/save', task.update);
+app.get('/task/del', task.remove);
 
 app.get('/test', asyncHandler(apiTest));
 

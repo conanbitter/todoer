@@ -27,6 +27,7 @@
     "homepage": "https://github.com/conanbitter/todoer#readme",
     "private": true,
     "devDependencies": {
+        "@types/better-sqlite3": "^7.4.1",
         "nodemon": "^2.0.15",
         "typescript": "^4.5.2"
     },

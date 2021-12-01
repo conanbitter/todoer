@@ -32,15 +32,15 @@ app.use(async (ctx: Context, next: Next) => {
     }
 });
 
-app.use(koaBody());
+app.use(koaBody({ parsedMethods: ['GET'] }));
 app.use(needLogin);
 app.use(Router.get('/', (ctx: Context) => {
     ctx.body = `Hello, ${(ctx.state['user'] as LoginData).userName}!`;
 }));
 
 
-/*app.use(Router.get('/task/list', task.list));
-app.use(Router.get('/task/new', task.create));
+app.use(Router.get('/task/list', task.list));
+/*app.use(Router.get('/task/new', task.create));
 app.use(Router.get('/task/save', task.update));
 app.use(Router.get('/task/del', task.remove));*/
 

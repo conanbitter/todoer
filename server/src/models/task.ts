@@ -1,8 +1,8 @@
-import express, { Application, NextFunction, Request, Response } from 'express'
-import { LoginData } from '../common.js';
+import { Context } from 'koa'
+import { LoginData, validated } from '../common.js';
 import * as db from "../database.js";
 
-type TaskStatus = 'done' | 'inprogress' | 'all'
+type TaskStatus = 'completed' | 'unfinished' | 'all'
 
 interface Task {
     title: string;
@@ -11,32 +11,47 @@ interface Task {
     finished: string;
 }
 
+//#region List
+
 interface listInput {
-    labels?: string[];
+    label?: string;
     status: TaskStatus;
 }
 
-export function list(req: Request, res: Response) {
-    const user: string = (res.locals['user'] as LoginData).userID;
-    const input: listInput = req.body;
+interface listOutput {
+    tasks: Task[];
+}
+
+function isListInput(val: any): val is listInput {
+    console.log(val);
+    return val && ("status" in val) &&
+        (val.status == 'completed' || val.status == 'unfinished' || val.status == 'all') &&
+        (typeof val.label == 'undefined' || typeof val.label == 'string');
+}
+
+async function listAction(input: listInput, ctx: Context): Promise<listOutput> {
+    const user = (ctx.state['user'] as LoginData).userID;
     let tasks: Task[];
     switch (input.status) {
         case 'all':
             tasks = db.queryTaskListAll.all(user);
             break;
-        case 'done':
+        case 'completed':
             tasks = db.queryTaskListState.all(user, 1);
             break;
         default:
             tasks = db.queryTaskListState.all(user, 0);
     }
-    res.json({
-        "error": "ok",
+    return {
         "tasks": tasks
-    })
+    }
 }
 
-interface createInput {
+export const list = validated<listInput>(listAction, isListInput);
+
+// #endregion
+
+/*interface createInput {
     text: string;
 }
 
@@ -66,4 +81,4 @@ export function remove(req: Request, res: Response) {
     res.json({
         "error": "ok"
     })
-}
+}*/

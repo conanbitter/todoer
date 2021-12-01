@@ -1,49 +1,49 @@
-import express, { Application, NextFunction, Request, Response } from 'express'
-import bodyParser from 'body-parser';
-import asyncHandler from 'express-async-handler';
+import Koa, { Context, Next } from 'koa'
+import koaBody from 'koa-body';
+import Router from 'koa-route';
 import { LoginData } from './common.js';
 import * as task from './models/task.js';
 
-const app: Application = express();
+const app = new Koa();
 const port = 8080;
 
-function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
-    res.json({ "error": err.message });
+async function needLogin(ctx: Context, next: Next) {
+    ctx.state['user'] = <LoginData>{ userID: "1", userName: "alex" };
+    await next();
 }
 
-function needLogin(req: Request, res: Response, next: NextFunction) {
-    res.locals['user'] = <LoginData>{ userID: "1", userName: "alex" };
-    next();
-}
-
-async function apiTest(req: Request, res: Response): Promise<void> {
-    res.json({
+async function apiTest(ctx: Context) {
+    ctx.body = {
         "name": "User",
         "items": [
             "one",
             "two"
         ]
-    })
+    }
 }
 
-app.use(bodyParser.json());
-
-app.get('/', (req: Request, res: Response): void => {
-    res.send(`Hello, ${(res.locals['user'] as LoginData).userName}!`);
+app.use(async (ctx: Context, next: Next) => {
+    try {
+        await next()
+    } catch (err: any) {
+        ctx.body = {
+            "error": err.message
+        };
+    }
 });
 
+app.use(koaBody());
 app.use(needLogin);
-
-app.get('/task/list', task.list);
-app.get('/task/new', task.create);
-app.get('/task/save', task.update);
-app.get('/task/del', task.remove);
-
-app.get('/test', asyncHandler(apiTest));
+app.use(Router.get('/', (ctx: Context) => {
+    ctx.body = `Hello, ${(ctx.state['user'] as LoginData).userName}!`;
+}));
 
 
-app.use(errorHandler);
+/*app.use(Router.get('/task/list', task.list));
+app.use(Router.get('/task/new', task.create));
+app.use(Router.get('/task/save', task.update));
+app.use(Router.get('/task/del', task.remove));*/
 
-app.listen(port, (): void => {
-    console.log(`Example app listening at 👉 http://localhost:${port}`);
-});
+app.use(Router.get('/test', apiTest));
+
+app.listen(port);

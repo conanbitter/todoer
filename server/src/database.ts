@@ -4,3 +4,7 @@ var db = new Database('built/db.sqlite', { fileMustExist: true });
 
 export const queryTaskListAll = db.prepare("SELECT title,isdone,created,finished FROM tasks WHERE user = ?");
 export const queryTaskListState = db.prepare("SELECT title,isdone,created,finished FROM tasks WHERE user = ? AND isdone = ?");
+export const queryTaskCreate = db.prepare("INSERT INTO tasks(title,user) VALUES (?,?)");
+export const queryTaskUpdateText = db.prepare("UPDATE tasks SET title = ? WHERE id = ?");
+export const queryTaskUpdateState = db.prepare("UPDATE tasks SET isdone = ? WHERE id = ?");
+export const queryTaskRemove = db.prepare("DELETE FROM tasks WHERE id = ?");

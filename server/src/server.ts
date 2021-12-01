@@ -1,4 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
+import bodyParser from 'body-parser';
 import asyncHandler from 'express-async-handler';
 import { LoginData } from './common.js';
 import * as task from './models/task.js';
@@ -11,11 +12,6 @@ function errorHandler(err: Error, req: Request, res: Response, next: NextFunctio
 }
 
 function needLogin(req: Request, res: Response, next: NextFunction) {
-    console.log("login");
-    next();
-}
-
-function fakeLogin(req: Request, res: Response, next: NextFunction) {
     res.locals['user'] = <LoginData>{ userID: "1", userName: "alex" };
     next();
 }
@@ -30,7 +26,7 @@ async function apiTest(req: Request, res: Response): Promise<void> {
     })
 }
 
-app.use(fakeLogin);
+app.use(bodyParser.json());
 
 app.get('/', (req: Request, res: Response): void => {
     res.send(`Hello, ${(res.locals['user'] as LoginData).userName}!`);

@@ -11,6 +11,11 @@ interface Task {
     finished: string;
 }
 
+function checkTaskOwner(taskID: string, userID: string): boolean {
+    let result: number = db.queryTaskCheck.get(taskID, userID).count;
+    return result == 1;
+}
+
 //#region List
 
 interface listInput {
@@ -65,6 +70,7 @@ function isCreateInput(val: any): val is createInput {
 }
 
 async function createAction(input: createInput, ctx: Context): Promise<createOutput> {
+    const user = (ctx.state['user'] as LoginData).userID;
     return { id: "1" };
 }
 
@@ -96,6 +102,10 @@ function isUpdateInput(val: any): val is updateInput {
 }
 
 async function updateAction(input: updateInput, ctx: Context): Promise<{}> {
+    const user = (ctx.state['user'] as LoginData).userID;
+    if (!checkTaskOwner(input.id, user)) {
+        throw new Error('task_not_found');
+    }
     return {}
 }
 
@@ -115,6 +125,10 @@ function isRemoveInput(val: any): val is removeInput {
 }
 
 async function removeAction(input: removeInput, ctx: Context): Promise<{}> {
+    const user = (ctx.state['user'] as LoginData).userID;
+    if (!checkTaskOwner(input.id, user)) {
+        throw new Error('task_not_found');
+    }
     return {}
 }
 

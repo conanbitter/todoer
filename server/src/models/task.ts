@@ -1,3 +1,4 @@
+import Database from 'better-sqlite3';
 import { Context } from 'koa'
 import { LoginData, validated } from '../common.js';
 import * as db from "../database.js";
@@ -71,7 +72,12 @@ function isCreateInput(val: any): val is createInput {
 
 async function createAction(input: createInput, ctx: Context): Promise<createOutput> {
     const user = (ctx.state['user'] as LoginData).userID;
-    return { id: "1" };
+    let result = db.queryTaskCreate.run(input.text, user);
+    if (result.changes == 1) {
+        return { id: result.lastInsertRowid.toString() };
+    } else {
+        throw new Error('cant_insert');
+    }
 }
 
 export const create = validated<createInput>(createAction, isCreateInput);
@@ -106,7 +112,17 @@ async function updateAction(input: updateInput, ctx: Context): Promise<{}> {
     if (!checkTaskOwner(input.id, user)) {
         throw new Error('task_not_found');
     }
-    return {}
+    let result: Database.RunResult;
+    if ("text" in input) {
+        result = db.queryTaskUpdateText.run(input.text, input.id);
+    } else {
+        result = db.queryTaskUpdateState.run(input.state, input.id);
+    }
+    if (result.changes == 1) {
+        return {};
+    } else {
+        throw new Error('cant_update');
+    }
 }
 
 export const update = validated<updateInput>(updateAction, isUpdateInput);
@@ -129,7 +145,12 @@ async function removeAction(input: removeInput, ctx: Context): Promise<{}> {
     if (!checkTaskOwner(input.id, user)) {
         throw new Error('task_not_found');
     }
-    return {}
+    let result = db.queryTaskRemove.run(input.id);
+    if (result.changes == 1) {
+        return {};
+    } else {
+        throw new Error('cant_delete');
+    }
 }
 
 export const remove = validated<removeInput>(removeAction, isRemoveInput);

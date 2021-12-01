@@ -23,7 +23,6 @@ interface listOutput {
 }
 
 function isListInput(val: any): val is listInput {
-    console.log(val);
     return val && ("status" in val) &&
         (val.status == 'completed' || val.status == 'unfinished' || val.status == 'all') &&
         (typeof val.label == 'undefined' || typeof val.label == 'string');
@@ -51,34 +50,74 @@ export const list = validated<listInput>(listAction, isListInput);
 
 // #endregion
 
-/*interface createInput {
+//#region Create
+
+interface createInput {
     text: string;
 }
 
-export function create(req: Request, res: Response) {
-    res.json({
-        "error": "ok"
-    })
-}
-
-interface updateInput {
+interface createOutput {
     id: string;
-    text?: string;
-    isdone?: boolean;
 }
 
-export function update(req: Request, res: Response) {
-    res.json({
-        "error": "ok"
-    })
+function isCreateInput(val: any): val is createInput {
+    return val && (typeof val.text == 'string');
 }
+
+async function createAction(input: createInput, ctx: Context): Promise<createOutput> {
+    return { id: "1" };
+}
+
+export const create = validated<createInput>(createAction, isCreateInput);
+
+//#endregion
+
+//#region Update
+
+interface updateTextInput {
+    id: string;
+    text: string;
+}
+
+interface updateStatusInput {
+    id: string;
+    state: string;
+}
+
+type updateInput = updateTextInput | updateStatusInput;
+
+function isUpdateInput(val: any): val is updateInput {
+    return val &&
+        (typeof val.id == 'string') &&
+        (
+            ((typeof val.text == 'string') && (typeof val.state == 'undefined')) ||
+            ((typeof val.text == 'undefined') && (typeof val.state == 'string'))
+        )
+}
+
+async function updateAction(input: updateInput, ctx: Context): Promise<{}> {
+    return {}
+}
+
+export const update = validated<updateInput>(updateAction, isUpdateInput);
+
+//#endregion
+
+//#region Remove
 
 interface removeInput {
     id: string;
 }
 
-export function remove(req: Request, res: Response) {
-    res.json({
-        "error": "ok"
-    })
-}*/
+function isRemoveInput(val: any): val is removeInput {
+    return val &&
+        (typeof val.id == 'string');
+}
+
+async function removeAction(input: removeInput, ctx: Context): Promise<{}> {
+    return {}
+}
+
+export const remove = validated<removeInput>(removeAction, isRemoveInput);
+
+//#endregion

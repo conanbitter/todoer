@@ -40,9 +40,9 @@ app.use(Router.get('/', (ctx: Context) => {
 
 
 app.use(Router.get('/task/list', task.list));
-/*app.use(Router.get('/task/new', task.create));
+app.use(Router.get('/task/new', task.create));
 app.use(Router.get('/task/save', task.update));
-app.use(Router.get('/task/del', task.remove));*/
+app.use(Router.get('/task/del', task.remove));
 
 app.use(Router.get('/test', apiTest));
 

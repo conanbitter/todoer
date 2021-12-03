@@ -3,3 +3,6 @@ server/node_modules
 www/node_modules
 www/app
 www/db.sqlite
+client/node_modules
+www/static/bundle.js
+www/static/bundle.js.map

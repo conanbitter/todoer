@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3'
+import { getPath } from './common.js'
 
-var db = new Database('built/db.sqlite', { fileMustExist: true });
+var db = new Database(getPath('db.sqlite'), { fileMustExist: true });
 
 export const queryTaskListAll = db.prepare("SELECT title,isdone,created,finished FROM tasks WHERE user = ?");
 export const queryTaskListState = db.prepare("SELECT title,isdone,created,finished FROM tasks WHERE user = ? AND isdone = ?");

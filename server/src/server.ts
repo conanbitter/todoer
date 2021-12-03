@@ -1,7 +1,10 @@
 import Koa, { Context, Next } from 'koa'
 import koaBody from 'koa-body';
 import Router from 'koa-route';
-import { LoginData } from './common.js';
+import serve from 'koa-static';
+import send from 'koa-send';
+import mount from 'koa-mount';
+import { LoginData, rootDir, getPath } from './common.js';
 import * as task from './models/task.js';
 
 const app = new Koa();
@@ -38,7 +41,6 @@ app.use(Router.get('/', (ctx: Context) => {
     ctx.body = `Hello, ${(ctx.state['user'] as LoginData).userName}!`;
 }));
 
-
 app.use(Router.get('/task/list', task.list));
 app.use(Router.get('/task/new', task.create));
 app.use(Router.get('/task/save', task.update));
@@ -46,4 +48,12 @@ app.use(Router.get('/task/del', task.remove));
 
 app.use(Router.get('/test', apiTest));
 
-app.listen(port);
+const server = new Koa()
+server.use(mount('/api', app));
+server.use(mount('/static', serve(getPath('static'))));
+
+server.use(async (ctx: Context, next: Next) => {
+    await send(ctx, 'index.html', { root: rootDir });
+});
+
+server.listen(port);

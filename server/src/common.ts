@@ -1,4 +1,6 @@
 import { Context } from 'koa'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 export interface LoginData {
     userID: string;
@@ -17,4 +19,10 @@ export function validated<Type>(fn: (input: Type, ctx: Context) => Promise<any>,
             throw new Error('invalid_input');
         }
     }
+}
+
+export const rootDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+export function getPath(pathname: string): string {
+    return path.join(rootDir, pathname);
 }

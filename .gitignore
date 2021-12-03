@@ -1,2 +1,5 @@
+.vscode
 server/node_modules
-server/built
+www/node_modules
+www/app
+www/db.sqlite

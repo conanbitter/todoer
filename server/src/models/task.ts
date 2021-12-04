@@ -3,7 +3,7 @@ import { Context } from 'koa'
 import { LoginData, validated } from '../common.js';
 import * as db from "../database.js";
 
-type TaskStatus = 'completed' | 'unfinished' | 'all'
+type TaskState = 'completed' | 'unfinished' | 'all'
 
 interface Task {
     title: string;
@@ -21,7 +21,7 @@ function checkTaskOwner(taskID: string, userID: string): boolean {
 
 interface listInput {
     label?: string;
-    status: TaskStatus;
+    state: TaskState;
 }
 
 interface listOutput {
@@ -29,15 +29,15 @@ interface listOutput {
 }
 
 function isListInput(val: any): val is listInput {
-    return val && ("status" in val) &&
-        (val.status == 'completed' || val.status == 'unfinished' || val.status == 'all') &&
+    return val && ("state" in val) &&
+        (val.state == 'completed' || val.state == 'unfinished' || val.state == 'all') &&
         (typeof val.label == 'undefined' || typeof val.label == 'string');
 }
 
 async function listAction(input: listInput, ctx: Context): Promise<listOutput> {
     const user = (ctx.state['user'] as LoginData).userID;
     let tasks: Task[];
-    switch (input.status) {
+    switch (input.state) {
         case 'all':
             tasks = db.queryTaskListAll.all(user);
             break;

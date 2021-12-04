@@ -15,16 +15,6 @@ async function needLogin(ctx: Context, next: Next) {
     await next();
 }
 
-async function apiTest(ctx: Context) {
-    ctx.body = {
-        "name": "User",
-        "items": [
-            "one",
-            "two"
-        ]
-    }
-}
-
 app.use(async (ctx: Context, next: Next) => {
     try {
         await next()
@@ -35,18 +25,18 @@ app.use(async (ctx: Context, next: Next) => {
     }
 });
 
-app.use(koaBody({ parsedMethods: ['GET'] }));
+app.use(koaBody({ parsedMethods: ['POST'] }));
 app.use(needLogin);
-app.use(Router.get('/', (ctx: Context) => {
-    ctx.body = `Hello, ${(ctx.state['user'] as LoginData).userName}!`;
-}));
+app.use(async (ctx: Context, next: Next) => {
+    console.log(ctx.request);
+    console.log(ctx.request.body);
+    await next();
+});
 
-app.use(Router.get('/task/list', task.list));
-app.use(Router.get('/task/new', task.create));
-app.use(Router.get('/task/save', task.update));
-app.use(Router.get('/task/del', task.remove));
-
-app.use(Router.get('/test', apiTest));
+app.use(Router.post('/task/list', task.list));
+app.use(Router.post('/task/new', task.create));
+app.use(Router.post('/task/save', task.update));
+app.use(Router.post('/task/del', task.remove));
 
 const server = new Koa()
 server.use(mount('/api', app));

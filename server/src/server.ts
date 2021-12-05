@@ -15,6 +15,8 @@ async function needLogin(ctx: Context, next: Next) {
     await next();
 }
 
+const timeout = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 app.use(async (ctx: Context, next: Next) => {
     try {
         await next()
@@ -28,8 +30,7 @@ app.use(async (ctx: Context, next: Next) => {
 app.use(koaBody({ parsedMethods: ['POST'] }));
 app.use(needLogin);
 app.use(async (ctx: Context, next: Next) => {
-    console.log(ctx.request);
-    console.log(ctx.request.body);
+    await timeout(1000);
     await next();
 });
 

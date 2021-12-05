@@ -1,4 +1,5 @@
 import React from 'react';
+import { TaskList } from './TaskList';
 
 interface AppState {
     name: string;
@@ -15,7 +16,7 @@ export class App extends React.Component<{}, AppState> {
     render() {
         return (
             <div>
-                <h1>Hello, {this.state.name}!</h1>
+                <TaskList />
             </div>
         );
     }

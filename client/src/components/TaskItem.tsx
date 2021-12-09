@@ -17,12 +17,36 @@ export class TaskItem extends React.Component<TaskItemProps, TaskItemState> {
         this.state = { mode: 'show' };
     }
 
+    setEditMode = () => {
+        this.setState({ mode: 'edit' });
+    }
+
+    exitEditMode = () => {
+        this.setState({ mode: 'show' });
+    }
+
     render() {
-        return (
-            <div>
-                <h1>{this.props.task.title}</h1>
-                <p>Создано: {moment(this.props.task.created).format('LLL')}</p>
-            </div>
-        );
+        if (this.state.mode == 'show') {
+            return (
+                <div>
+                    <h3>{this.props.task.title}</h3>
+                    <p>
+                        Создано: {moment(this.props.task.created).format('LLL')}
+                        <button onClick={this.setEditMode}>Редактировать</button>
+                    </p>
+                    <hr />
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <input type="text" value={this.props.task.title} />
+                    <p>
+                        <button onClick={this.exitEditMode}>Отменить</button>
+                    </p>
+                    <hr />
+                </div>
+            );
+        }
     }
 }

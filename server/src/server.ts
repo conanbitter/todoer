@@ -30,7 +30,7 @@ app.use(async (ctx: Context, next: Next) => {
 app.use(koaBody({ parsedMethods: ['POST'] }));
 app.use(needLogin);
 app.use(async (ctx: Context, next: Next) => {
-    await timeout(1000);
+    //await timeout(1000);
     await next();
 });
 

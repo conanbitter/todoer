@@ -27,23 +27,23 @@
     "homepage": "https://github.com/conanbitter/todoer#readme",
     "private": true,
     "devDependencies": {
-        "@types/better-sqlite3": "^7.4.1",
-        "@types/koa": "^2.13.4",
-        "@types/koa-mount": "^4.0.1",
-        "@types/koa-route": "^3.2.5",
-        "@types/koa-static": "^4.0.2",
-        "nodemon": "^2.0.15",
-        "typescript": "^4.6.0-dev.20211203"
+        "@types/better-sqlite3": "^7.6.12",
+        "@types/koa": "^2.15.0",
+        "@types/koa-mount": "^4.0.5",
+        "@types/koa-route": "^3.2.8",
+        "@types/koa-static": "^4.0.4",
+        "nodemon": "^3.1.9",
+        "typescript": "^5.8.2"
     },
     "dependencies": {
-        "bcrypt": "^5.0.1",
-        "better-sqlite3": "^7.4.5",
-        "koa": "^2.13.4",
-        "koa-body": "^4.2.0",
+        "bcrypt": "^5.1.1",
+        "better-sqlite3": "^11.8.1",
+        "koa": "^2.16.0",
+        "koa-body": "^6.0.1",
         "koa-mount": "^4.0.0",
-        "koa-route": "^3.2.0",
+        "koa-route": "^4.0.1",
         "koa-send": "^5.0.1",
         "koa-static": "^5.0.0",
-        "nanoid": "^3.1.30"
+        "nanoid": "^5.1.2"
     }
 }
